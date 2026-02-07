@@ -1,35 +1,36 @@
 #!/bin/bash
 
-# Colores para que se vea Pro
+# Colores melos
 VERDE="\e[1;32m"
-AZUL="\e[1;34m"
+CYAN="\e[1;36m"
 RESET="\e[0m"
 
 clear
-echo -e "${AZUL}==========================================${RESET}"
-echo -e "${VERDE}    INSTALADOR MAESTRO - NAMETECHDEVZ     ${RESET}"
-echo -e "${AZUL}==========================================${RESET}"
+echo -e "${CYAN}==============================================${RESET}"
+echo -e "${VERDE}    INSTALADOR OFICIAL NAMETECHDEVZ VPS     ${RESET}"
+echo -e "${CYAN}==============================================${RESET}"
 
-# 1. Actualización del Sistema
-echo -e "\n${AZUL}[1/3]${RESET} Actualizando paquetes..."
+# 1. Actualizar sistema
+echo -e "\n${VERDE}[+]${RESET} Actualizando servidor..."
 apt update -y && apt upgrade -y
 
-# 2. Instalación de Dependencias Web
-echo -e "\n${AZUL}[2/3]${RESET} Instalando Apache, PHP y SSH2..."
-apt install apache2 php libapache2-mod-php php-ssh2 git wget -y
+# 2. Instalar Servidor Web y PHP
+echo -e "${VERDE}[+]${RESET} Instalando Apache y PHP con soporte SSH..."
+apt install apache2 php libapache2-mod-php php-ssh2 wget git -y
 
-# 3. Descarga del Panel Web (Opcional: Clonar tu propia web)
-echo -e "\n${AZUL}[3/3]${RESET} Configurando Panel de Control..."
-# Aquí podrías descargar tus archivos .php a /var/www/html/
-# wget https://tu-sitio.com/panel.zip -O /var/www/html/panel.zip
+# 3. Limpiar carpeta web y descargar tu panel
+echo -e "${VERDE}[+]${RESET} Descargando Panel Web desde GitHub..."
+rm -rf /var/www/html/index.html
+wget -O /var/www/html/index.php https://raw.githubusercontent.com/Nametechdevz/mi-script-vps/main/index.php
 
-# 4. Configuración de Seguridad Inicial
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw allow 22/tcp
-echo "y" | ufw enable
+# 4. Permisos de seguridad
+echo -e "${VERDE}[+]${RESET} Configurando permisos..."
+chown -R www-data:www-data /var/www/html/
+chmod -R 755 /var/www/html/
 
-echo -e "\n${VERDE}==========================================${RESET}"
-echo -e "      INSTALACIÓN COMPLETADA CON ÉXITO    "
+# 5. Finalizar
+systemctl restart apache2
+echo -e "\n${CYAN}==============================================${RESET}"
+echo -e "${VERDE}     ¡INSTALACIÓN COMPLETADA EXITOSAMENTE!    ${RESET}"
 echo -e " Accede a tu panel en: http://$(hostname -I | awk '{print $1}')"
-echo -e "${VERDE}==========================================${RESET}"
+echo -e "${CYAN}==============================================${RESET}"
