@@ -1,30 +1,35 @@
 #!/bin/bash
-# INSTALADOR OFICIAL - SCRIPTMOD LACASITA
 
-# Limpiar pantalla
+# Colores para que se vea Pro
+VERDE="\e[1;32m"
+AZUL="\e[1;34m"
+RESET="\e[0m"
+
 clear
+echo -e "${AZUL}==========================================${RESET}"
+echo -e "${VERDE}    INSTALADOR MAESTRO - NAMETECHDEVZ     ${RESET}"
+echo -e "${AZUL}==========================================${RESET}"
 
-# Actualizar el sistema (como en tu comando)
-echo -e "\e[1;32mActualizando paquetes del sistema...\e[0m"
+# 1. Actualización del Sistema
+echo -e "\n${AZUL}[1/3]${RESET} Actualizando paquetes..."
 apt update -y && apt upgrade -y
 
-# Verificar dependencias básicas
-echo -e "\e[1;34mInstalando dependencias necesarias...\e[0m"
-apt install wget curl git unzip -y
+# 2. Instalación de Dependencias Web
+echo -e "\n${AZUL}[2/3]${RESET} Instalando Apache, PHP y SSH2..."
+apt install apache2 php libapache2-mod-php php-ssh2 git wget -y
 
-# Crear directorio de trabajo
-mkdir -p /etc/lacasita
-cd /etc/lacasita
+# 3. Descarga del Panel Web (Opcional: Clonar tu propia web)
+echo -e "\n${AZUL}[3/3]${RESET} Configurando Panel de Control..."
+# Aquí podrías descargar tus archivos .php a /var/www/html/
+# wget https://tu-sitio.com/panel.zip -O /var/www/html/panel.zip
 
-# Descargar los archivos del MOD
-echo -e "\e[1;33mDescargando archivos de configuración...\e[0m"
-wget --no-check-certificate https://raw.githubusercontent.com/lacasitamx/SCRIPTMOD-LACASITA/master/Archivos/modulos.zip
+# 4. Configuración de Seguridad Inicial
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 22/tcp
+echo "y" | ufw enable
 
-# Descomprimir y dar permisos
-unzip modulos.zip
-chmod +x *
-chmod 777 /etc/lacasita/*.sh
-
-# Ejecución del Menú Principal
-# Este comando llama al menú que ya está dentro del VPS
-./menu.sh
+echo -e "\n${VERDE}==========================================${RESET}"
+echo -e "      INSTALACIÓN COMPLETADA CON ÉXITO    "
+echo -e " Accede a tu panel en: http://$(hostname -I | awk '{print $1}')"
+echo -e "${VERDE}==========================================${RESET}"
