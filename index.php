@@ -1,8 +1,8 @@
 <?php
 // CONFIGURACIÓN - Pon los datos de tu VPS aquí
-$vps_host = '127.0.0.1'; // Se conecta a sí mismo
+$vps_host = '45.76.61.3'; // Se conecta a sí mismo
 $vps_user = 'root';
-$vps_pass = 'TU_CONTRASEÑA_AQUÍ'; 
+$vps_pass = 'fQ2#!?UzKG.bxZ*L'; 
 
 $mensaje = "";
 if ($_POST) {
